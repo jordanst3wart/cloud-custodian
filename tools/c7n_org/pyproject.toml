@@ -7,6 +7,8 @@ requires-python = "<4.0.0,>=3.9.2"
 dependencies = [
     "c7n",
     "click>=8.0",
+    "azure",
+    "oci"
 ]
 name = "c7n_org"
 version = "0.6.47"
@@ -25,10 +27,6 @@ documentation = "https://cloudcustodian.io/docs/tools/c7n-org.html"
 
 [project.scripts]
 c7n-org = "c7n_org.cli:cli"
-c7n-org-orgaccounts = "c7n_org.scripts.orgaccounts:main"
-c7n-org-azuresubs = "c7n_org.scripts.azuresubs:main"
-c7n-org-gcpprojects = "c7n_org.scripts.gcpprojects:main"
-c7n-org-ocitenancies = "c7n_org.scripts.ocitenancies:main"
 
 [dependency-groups]
 dev = [
