@@ -10,6 +10,7 @@ import oci
 from c7n_oci.session import Session
 
 from c7n.utils import yaml_dump
+from c7n_org import cli
 
 DEFAULT_LOCATION = os.path.join("~", ".oci", "config")
 
@@ -95,7 +96,7 @@ def add_organization_child_tenancies(tenancies, tenancy_set, parser, sections):
             tenancy_set.add(tenancy.tenancy_id)
 
 
-@click.command(name='ocitenancies')
+@cli.command(name='ocitenancies')
 @click.option(
     "-f",
     "--output",

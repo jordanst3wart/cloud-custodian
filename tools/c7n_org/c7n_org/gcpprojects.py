@@ -4,9 +4,10 @@
 import click
 import yaml
 from c7n_gcp.client import Session
+from c7n_org import cli
 
 
-@click.command(name='gcpprojects')
+@cli.command(name='gcpprojects')
 @click.option(
     '-f',
     '--output',

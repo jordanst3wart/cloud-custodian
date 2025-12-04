@@ -10,7 +10,7 @@ from c7n.utils import yaml_dump
 NAME_TEMPLATE = "{name}"
 
 
-@click.command(name='azuresubs')
+@cli.command(name='azuresubs')
 @click.option(
     '-f',
     '--output',

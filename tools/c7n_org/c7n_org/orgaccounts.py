@@ -10,6 +10,7 @@ from c7n.config import Bag, Config
 from c7n.credentials import SessionFactory, assumed_session
 from c7n.resources.aws import ApiStats
 from c7n.utils import yaml_dump
+from c7n_org import cli
 
 ROLE_TEMPLATE = "arn:aws:iam::{Id}:role/OrganizationAccountAccessRole"
 NAME_TEMPLATE = "{name}"
@@ -17,7 +18,7 @@ NAME_TEMPLATE = "{name}"
 log = logging.getLogger('orgaccounts')
 
 
-@click.command(name='orgaccounts')
+@cli.command(name='orgaccounts')
 @click.option(
     '--role',
     default=ROLE_TEMPLATE,
