@@ -8,7 +8,11 @@ dependencies = [
     "c7n",
     "click>=8.0",
     "azure-mgmt-resource", # todo version
-    "oci"
+    "oci",
+    "c7n_azure",
+    "c7n_gcp",
+    "c7n_oci"
+    # maybe yaml
 ]
 name = "c7n_org"
 version = "0.6.47"
