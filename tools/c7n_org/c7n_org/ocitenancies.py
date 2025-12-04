@@ -1,15 +1,15 @@
 # Copyright The Cloud Custodian Authors.
 # SPDX-License-Identifier: Apache-2.0
 
-import os
-import oci
-import click
-import logging
 import configparser
+import logging
+import os
+
+import click
+import oci
+from c7n_oci.session import Session
 
 from c7n.utils import yaml_dump
-
-from c7n_oci.session import Session
 
 DEFAULT_LOCATION = os.path.join("~", ".oci", "config")
 
@@ -75,10 +75,11 @@ def get_config_sections(parser):
 
 def add_organization_child_tenancies(tenancies, tenancy_set, parser, sections):
     client = Session(oci.config.from_file()).client(
-        "oci.tenant_manager_control_plane.OrganizationClient")
+        "oci.tenant_manager_control_plane.OrganizationClient"
+    )
     orgs_response = client.list_organizations(
         compartment_id=parser.get(parser.default_section, "tenancy")
-        )
+    )
     orgs = orgs_response.data.items
     for org in orgs:
         tenancies_response = client.list_organization_tenancies(organization_id=org.id)
@@ -94,7 +95,7 @@ def add_organization_child_tenancies(tenancies, tenancy_set, parser, sections):
             tenancy_set.add(tenancy.tenancy_id)
 
 
-@click.command()
+@click.command(name='ocitenancies')
 @click.option(
     "-f",
     "--output",
