@@ -4,10 +4,9 @@
 import click
 import yaml
 from c7n_gcp.client import Session
-from c7n_org import cli
 
 
-@cli.command(name='gcpprojects')
+@click.command(name='gcpprojects')
 @click.option(
     '-f',
     '--output',
@@ -15,7 +14,7 @@ from c7n_org import cli
     default='-',
     help="File to store the generated config (default stdout)",
 )
-def main(output):
+def gcpprojects(output):
     """
     Generate a c7n-org gcp projects config file
     """
@@ -40,7 +39,3 @@ def main(output):
             results.append(project_info)
 
     output.write(yaml.safe_dump({'projects': results}, default_flow_style=False))
-
-
-if __name__ == '__main__':
-    main()

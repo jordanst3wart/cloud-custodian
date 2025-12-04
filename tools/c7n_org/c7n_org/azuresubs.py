@@ -10,7 +10,7 @@ from c7n.utils import yaml_dump
 NAME_TEMPLATE = "{name}"
 
 
-@cli.command(name='azuresubs')
+@click.command(name='azuresubs')
 @click.option(
     '-f',
     '--output',
@@ -30,7 +30,7 @@ NAME_TEMPLATE = "{name}"
     default=NAME_TEMPLATE,
     help="Name template for subscriptions in the config, defaults to %s" % NAME_TEMPLATE,
 )
-def main(output, state, name):
+def azuresubs(output, state, name):
     """
     Generate a c7n-org subscriptions config file
     """
@@ -46,7 +46,3 @@ def main(output, state, name):
         results.append(sub_info)
 
     print(yaml_dump({'subscriptions': results}), file=output)
-
-
-if __name__ == '__main__':
-    main()

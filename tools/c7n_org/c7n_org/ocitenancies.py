@@ -10,7 +10,6 @@ import oci
 from c7n_oci.session import Session
 
 from c7n.utils import yaml_dump
-from c7n_org import cli
 
 DEFAULT_LOCATION = os.path.join("~", ".oci", "config")
 
@@ -96,7 +95,7 @@ def add_organization_child_tenancies(tenancies, tenancy_set, parser, sections):
             tenancy_set.add(tenancy.tenancy_id)
 
 
-@cli.command(name='ocitenancies')
+@click.command(name='ocitenancies')
 @click.option(
     "-f",
     "--output",
@@ -110,7 +109,7 @@ def add_organization_child_tenancies(tenancies, tenancy_set, parser, sections):
     default=False,
     help="Add the child tenancies to the c7n-org configuration file",
 )
-def main(output, add_child_tenancies):
+def ocitenancies(output, add_child_tenancies):
     """Generate a c7n-org OCI tenancies configuration file using OCI configuration file and
     OCI Organizations API
 
@@ -127,7 +126,3 @@ def main(output, add_child_tenancies):
         # Add the child tenancies using OCI Organizations API
         add_organization_child_tenancies(tenancies, tenancy_set, parser, sections)
     print(yaml_dump({"tenancies": tenancies}), file=output)
-
-
-if __name__ == "__main__":
-    main()
