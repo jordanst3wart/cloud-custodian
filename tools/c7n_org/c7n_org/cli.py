@@ -37,7 +37,7 @@ from c7n.utils import (
     get_policy_provider,
     join_output_path,
 )
-from c7n_org import azuresubs, gcpprojects, ocitenancies, orgaccounts
+from c7n_org import orgaccounts
 from c7n_org.utils import account_tags, environ
 
 log = logging.getLogger('c7n_org')
@@ -932,10 +932,7 @@ def run(
         sys.exit(1)
 
 
-cli.add_command(gcpprojects)
-cli.add_command(ocitenancies)
-cli.add_command(orgaccounts)
-cli.add_command(azuresubs)
+cli.add_command(orgaccounts, 'orgaccounts')
 
 if __name__ == "__main__":
     cli()
