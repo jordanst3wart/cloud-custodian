@@ -7,7 +7,7 @@ requires-python = "<4.0.0,>=3.9.2"
 dependencies = [
     "c7n",
     "click>=8.0",
-    "azure",
+    "azure-mgmt-resource", # todo version
     "oci"
 ]
 name = "c7n_org"
