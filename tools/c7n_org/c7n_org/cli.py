@@ -932,7 +932,7 @@ def run(
         sys.exit(1)
 
 
-cli.add_command(orgaccounts, 'orgaccounts')
+cli.add_command(orgaccounts.orgaccounts)
 
 if __name__ == "__main__":
     cli()

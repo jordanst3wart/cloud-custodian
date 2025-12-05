@@ -47,11 +47,7 @@ log = logging.getLogger('orgaccounts')
     '-i', '--ignore', multiple=True, help="list of accounts that won't be added to the config file"
 )
 def orgaccounts(role, name, ou, assume, profile, output, regions, active, ignore):
-    """Generate a c7n-org accounts config file using AWS Organizations
-
-    With c7n-org you can then run policies or arbitrary scripts across
-    accounts.
-    """
+    """generate c7n-org accounts config file using AWS Organizations"""
     logging.basicConfig(level=logging.INFO)
 
     _, session = get_session(assume, 'c7n-org', profile)
