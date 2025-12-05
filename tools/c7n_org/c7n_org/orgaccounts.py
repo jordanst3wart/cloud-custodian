@@ -1,12 +1,14 @@
 # Copyright The Cloud Custodian Authors.
 # SPDX-License-Identifier: Apache-2.0
 
-import click
 import logging
 import os
+
+import click
+
 from c7n.config import Bag, Config
+from c7n.credentials import SessionFactory, assumed_session
 from c7n.resources.aws import ApiStats
-from c7n.credentials import assumed_session, SessionFactory
 from c7n.utils import yaml_dump
 
 ROLE_TEMPLATE = "arn:aws:iam::{Id}:role/OrganizationAccountAccessRole"
@@ -15,33 +17,37 @@ NAME_TEMPLATE = "{name}"
 log = logging.getLogger('orgaccounts')
 
 
-@click.command()
+@click.command(name='orgaccounts')
 @click.option(
     '--role',
     default=ROLE_TEMPLATE,
-    help="Role template for accounts in the config, defaults to %s" % ROLE_TEMPLATE)
+    help="Role template for accounts in the config, defaults to %s" % ROLE_TEMPLATE,
+)
 @click.option(
     '--name',
     default=NAME_TEMPLATE,
-    help="Name template for accounts in the config, defaults to %s" % NAME_TEMPLATE)
-@click.option('--ou', multiple=True, default=["/"],
-              help="Only export the given subtrees of an organization")
-@click.option('-r', '--regions', multiple=True,
-              help="If specified, set regions per account in config")
+    help="Name template for accounts in the config, defaults to %s" % NAME_TEMPLATE,
+)
+@click.option(
+    '--ou', multiple=True, default=["/"], help="Only export the given subtrees of an organization"
+)
+@click.option(
+    '-r', '--regions', multiple=True, help="If specified, set regions per account in config"
+)
 @click.option('--assume', help="Role to assume for Credentials")
 @click.option('--profile', help="AWS CLI Profile to use for Credentials")
 @click.option(
-    '-f', '--output', type=click.File('w'),
-    help="File to store the generated config (default stdout)")
+    '-f',
+    '--output',
+    type=click.File('w'),
+    help="File to store the generated config (default stdout)",
+)
 @click.option('-a', '--active', is_flag=True, default=False, help="Get only active accounts")
-@click.option('-i', '--ignore', multiple=True,
-  help="list of accounts that won't be added to the config file")
-def main(role, name, ou, assume, profile, output, regions, active, ignore):
-    """Generate a c7n-org accounts config file using AWS Organizations
-
-    With c7n-org you can then run policies or arbitrary scripts across
-    accounts.
-    """
+@click.option(
+    '-i', '--ignore', multiple=True, help="list of accounts that won't be added to the config file"
+)
+def orgaccounts(role, name, ou, assume, profile, output, regions, active, ignore):
+    """generate c7n-org accounts config file using AWS Organizations"""
     logging.basicConfig(level=logging.INFO)
 
     _, session = get_session(assume, 'c7n-org', profile)
@@ -57,7 +63,7 @@ def main(role, name, ou, assume, profile, output, regions, active, ignore):
 
         path_parts = a['Path'].strip('/').split('/')
         for idx, _ in enumerate(path_parts):
-            tags.append("path:/%s" % "/".join(path_parts[:idx + 1]))
+            tags.append("path:/%s" % "/".join(path_parts[: idx + 1]))
 
         for k, v in a.get('Tags', {}).items():
             tags.append("{}:{}".format(k, v))
@@ -74,7 +80,8 @@ def main(role, name, ou, assume, profile, output, regions, active, ignore):
             'name': a['Name'],
             'org_id': a['OrgId'],
             'tags': tags,
-            'role': arn_role}
+            'role': arn_role,
+        }
         ainfo['name'] = name.format(**ainfo)
         if regions:
             ainfo['regions'] = list(regions)
@@ -117,9 +124,7 @@ def get_ou_from_path(client, path):
             if found:
                 break
         if found is False:
-            raise ValueError(
-                "No OU named:%r found in path: %s" % (
-                    path, path))
+            raise ValueError("No OU named:%r found in path: %s" % (path, path))
     ou['Path'] = path
     return ou
 
@@ -127,9 +132,9 @@ def get_ou_from_path(client, path):
 def get_sub_ous(client, ou):
     results = [ou]
     ou_pager = client.get_paginator('list_organizational_units_for_parent')
-    for sub_ou in ou_pager.paginate(
-            ParentId=ou['Id']).build_full_result().get(
-                'OrganizationalUnits'):
+    for sub_ou in (
+        ou_pager.paginate(ParentId=ou['Id']).build_full_result().get('OrganizationalUnits')
+    ):
         sub_ou['Path'] = "/%s/%s" % (ou['Path'].strip('/'), sub_ou['Name'])
         results.extend(get_sub_ous(client, sub_ou))
     return results
@@ -143,13 +148,12 @@ def get_accounts_for_ou(client, ou, active, recursive=True, ignoredAccounts=()):
 
     account_pager = client.get_paginator('list_accounts_for_parent')
     for ou in ous:
-        for a in account_pager.paginate(
-            ParentId=ou['Id']).build_full_result().get(
-                'Accounts', []):
+        for a in account_pager.paginate(ParentId=ou['Id']).build_full_result().get('Accounts', []):
             a['Path'] = ou['Path']
             a['Tags'] = {
-                t['Key']: t['Value'] for t in
-                client.list_tags_for_resource(ResourceId=a['Id']).get('Tags', ())}
+                t['Key']: t['Value']
+                for t in client.list_tags_for_resource(ResourceId=a['Id']).get('Tags', ())
+            }
             if a['Id'] in ignoredAccounts:
                 continue
 
@@ -159,7 +163,3 @@ def get_accounts_for_ou(client, ou, active, recursive=True, ignoredAccounts=()):
             else:
                 results.append(a)
     return results
-
-
-if __name__ == '__main__':
-    main()
