@@ -1,9 +1,12 @@
 # Copyright The Cloud Custodian Authors.
 # SPDX-License-Identifier: Apache-2.0
 
+from gc import callbacks
+
 import click
 import logging
 import os
+import time
 from c7n.config import Bag, Config
 from c7n.resources.aws import ApiStats
 from c7n.credentials import assumed_session, SessionFactory
@@ -39,9 +42,10 @@ log = logging.getLogger('orgaccounts')
 def aws_accounts(role, name, ou, assume, profile, output, regions, active, ignore):
     """generate c7n-org aws accounts config file
     """
+    start_time = time.perf_counter()
     logging.basicConfig(level=logging.INFO)
 
-    _, session = get_session(assume, 'c7n-org', profile)
+    stats, session = get_session(assume, 'c7n-org', profile)
     client = session.client('organizations')
     accounts = []
     for path in ou:
@@ -80,8 +84,13 @@ def aws_accounts(role, name, ou, assume, profile, output, regions, active, ignor
 
         results.append(ainfo)
 
+    end_time = time.perf_counter()
     # log.info('api calls {}'.format(stats.get_metadata()))
     print(yaml_dump({'accounts': results}), file=output)
+    execution_time = end_time - start_time
+    print(f"Function took {execution_time:.6f} seconds to complete.", file=output)
+    print(f"Number of accounts {len(results)}")
+    print(f"Total api calls {stats.api_calls.total}")
 
 
 def get_session(role, session_name, profile):
