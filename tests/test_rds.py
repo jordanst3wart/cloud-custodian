@@ -2010,7 +2010,7 @@ class Resize(BaseTest):
 
     @staticmethod
     def get_window_now():
-        start = datetime.datetime.utcnow()
+        start = datetime.datetime.now(datetime.UTC)
         end = start + datetime.timedelta(seconds=60 * 60)  # hour long
         fmt = "%a:%H:%M"
         return "{}-{}".format(start.strftime(fmt), end.strftime(fmt))

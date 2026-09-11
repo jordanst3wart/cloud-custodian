@@ -156,7 +156,7 @@ class WebhookTest(BaseTest):
 
     @mock.patch('c7n.actions.webhook.urllib3.PoolManager.request')
     def test_process_date_serializer(self, request_mock):
-        current = datetime.datetime.utcnow()
+        current = datetime.datetime.now(datetime.UTC)
         resources = [
             {
                 "name": "test1",
