@@ -2466,7 +2466,7 @@ class SesConsecutiveStats(Filter):
         get_send_stats = client.get_send_statistics()
         results = []
         check_days = self.data.get('days', 2)
-        utcnow = datetime.datetime.utcnow()
+        utcnow = datetime.datetime.now(datetime.UTC)
         expected_dates = set()
 
         for days in range(1, check_days + 1):

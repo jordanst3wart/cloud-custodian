@@ -39,7 +39,7 @@ def main():
     output = subprocess.getoutput(" ".join(command))
     artifact_builds = json.loads(output)
 
-    now = datetime.datetime.utcnow().replace(tzinfo=tz.tzutc())
+    now = datetime.datetime.now(datetime.UTC).replace(tzinfo=tz.tzutc())
     candidate = None
 
     for build in artifact_builds:

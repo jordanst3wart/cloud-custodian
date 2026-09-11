@@ -108,7 +108,7 @@ class StackDriverMetrics(Metrics):
         # Resource is a Google controlled vocabulary with artificial
         # limitations on resource type there's not much useful we can
         # utilize.
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now(datetime.UTC)
         metrics_series = {
             'metric': {
                 'type': 'custom.googleapis.com/custodian/policy/%s' % key.lower(),

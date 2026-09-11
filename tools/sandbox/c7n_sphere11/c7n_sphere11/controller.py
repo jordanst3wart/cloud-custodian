@@ -154,7 +154,7 @@ class Controller:
             ResourceId=resource_id,
             #  ParentId=parent_id,
             #  Region=region,
-            LockDate=calendar.timegm(datetime.datetime.utcnow().timetuple()),
+            LockDate=calendar.timegm(datetime.datetime.now(datetime.UTC).timetuple()),
             LockStatus=lock_status)
         if not delta:
             record['RevisionDate'] = revision_date
@@ -171,7 +171,7 @@ class Controller:
         record = dict(
             AccountId=account_id,
             ResourceId=resource_id,
-            LockDate=calendar.timegm(datetime.datetime.utcnow().timetuple()),
+            LockDate=calendar.timegm(datetime.datetime.now(datetime.UTC).timetuple()),
             LockStatus=self.db.STATE_UNLOCKED)
         self.db.save(record)
         topic = self.config['accounts'][account_id].get('notify-locks')

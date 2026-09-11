@@ -236,7 +236,7 @@ def get_date_range(start, end):
     if end and not isinstance(end, datetime.datetime):
         end = parse_date(end)
 
-    now = datetime.datetime.utcnow().replace(
+    now = datetime.datetime.now(datetime.UTC).replace(
         hour=0, minute=0, second=0, microsecond=0)
     if end and not start:
         raise ValueError("Missing start date")

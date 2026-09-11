@@ -103,7 +103,7 @@ class StringUtils:
 def utcnow():
     """The datetime object for the current time in UTC
     """
-    return datetime.datetime.utcnow()
+    return datetime.datetime.now(datetime.UTC)
 
 
 def now(tz=None):

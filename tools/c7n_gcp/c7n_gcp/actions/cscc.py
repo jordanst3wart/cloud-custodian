@@ -157,7 +157,7 @@ class PostFinding(MethodAction):
             'state': 'ACTIVE',
             'category': self.data.get('category', self.DefaultCategory),
             'severity': self.data.get('severity', self.DefaultSeverity),
-            'eventTime': datetime.datetime.utcnow().isoformat('T') + 'Z',
+            'eventTime': datetime.datetime.now(datetime.UTC).isoformat('T') + 'Z',
             'sourceProperties': {
                 'resource_type': self.manager.type,
                 'title': policy.data.get('title', policy.name),

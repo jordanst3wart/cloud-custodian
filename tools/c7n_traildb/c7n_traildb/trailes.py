@@ -179,7 +179,7 @@ def get_date_path(date, delta=0):
     # optional input, use default time delta if not provided
     # delta is 24 hours for trail
     if not date:
-        date = datetime.datetime.utcnow() - datetime.timedelta(hours=delta)
+        date = datetime.datetime.now(datetime.UTC) - datetime.timedelta(hours=delta)
     elif date and not isinstance(date, datetime.datetime):
         date = parse_date(date)
 

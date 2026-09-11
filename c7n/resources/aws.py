@@ -405,7 +405,7 @@ class MetricsOutput(Metrics):
     def _format_metric(self, key, value, unit, dimensions):
         d = {
             "MetricName": key,
-            "Timestamp": datetime.datetime.utcnow(),
+            "Timestamp": datetime.datetime.now(datetime.UTC),
             "Value": value,
             "Unit": unit}
         d["Dimensions"] = [
@@ -474,7 +474,7 @@ class CloudWatchLogOutput(LogOutput):
                 region=self.ctx.options.region,
                 account=self.ctx.options.account_id,
                 policy=self.ctx.policy.name,
-                now=datetime.datetime.utcnow())
+                now=datetime.datetime.now(datetime.UTC))
         return log_stream
 
     def get_handler(self):

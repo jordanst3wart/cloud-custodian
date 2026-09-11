@@ -348,7 +348,7 @@ def get_date_range(start, end):
     if end and not isinstance(end, datetime.datetime):
         end = parse_date(end)
 
-    now = datetime.datetime.utcnow().replace(
+    now = datetime.datetime.now(datetime.UTC).replace(
         hour=0, minute=0, second=0, microsecond=0)
     if end and not start:
         raise ValueError("Missing start date")
@@ -363,7 +363,7 @@ def valid_date(date, delta=0):
     # optional input, use default time delta if not provided
     # delta is 1 hour for resources
     if not date:
-        date = datetime.datetime.utcnow() - datetime.timedelta(hours=delta)
+        date = datetime.datetime.now(datetime.UTC) - datetime.timedelta(hours=delta)
     elif date and not isinstance(date, datetime.datetime):
         date = parse_date(date)
 

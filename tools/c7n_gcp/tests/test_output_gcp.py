@@ -47,9 +47,9 @@ class MetricsOutputTest(BaseTest):
                 'filter': 'metric.type="custom.googleapis.com/custodian/policy/resourcecount"',
                 'pageSize': 3,
                 'interval_startTime': (
-                    datetime.datetime.utcnow() - datetime.timedelta(minutes=5)
+                    datetime.datetime.now(datetime.UTC) - datetime.timedelta(minutes=5)
                 ).isoformat('T') + 'Z',
-                'interval_endTime': datetime.datetime.utcnow().isoformat('T') + 'Z'
+                'interval_endTime': datetime.datetime.now(datetime.UTC).isoformat('T') + 'Z'
             })
         self.assertEqual(
             results['timeSeries'],
